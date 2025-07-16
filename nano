@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reddit Topic Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f5f5f5; }
+        .post { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+        .comment { margin-left: 20px; font-style: italic; color: #444; }
+        .meta { font-size: 0.9em; color: #666; margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <h1>Top Posts from r/Conservative (Today)</h1>
+
+    <form method="get">
+        <label for="tag">Filter by Topic:</label>
+        <select name="tag" onchange="this.form.submit()">
+            <option value="">-- All --</option>
+            {% for tag in tags %}
+                <option value="{{ tag }}" {% if selected_tag == tag %}selected{% endif %}>{{ tag }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <h2>Most Common Topics</h2>
+    <img src="/static/tag_chart.png" alt="Topic Chart">
+
+    <hr>
+
+    {% for post in posts %}
+        <div class="post">
+            <h3><a href="{{ post.url }}" target="_blank">{{ post.title }}</a></h3>
+            <div class="meta">
+                Upvotes: {{ post.upvotes }} | Comments: {{ post.comments }} | Posted: {{ post.created }}<br>
+                Author: {{ post.author }} | Flair: {{ post.flair }} | Topics: {{ post.topics|join(', ') }}
+            </div>
+            <p>{{ post.text }}</p>
+            {% if post.top_comments %}
+                <strong>Top Comments:</strong>
+                <ul>
+                    {% for comment in post.top_comments %}
+                        <li class="comment">Upvotes: {{ comment.score }} – {{ comment.body }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    {% endfor %}
+</body>
+</html>
+
