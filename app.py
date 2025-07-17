@@ -41,7 +41,7 @@ def home():
     selected_tag = request.args.get("tag")
 
     subreddit = reddit.subreddit("Conservative")
-    posts = subreddit.top(limit=50, time_filter='day')  # Top 50 posts today
+    posts = subreddit.top(limit=25, time_filter='day')  # Top 50 posts today
 
     post_data = []
     topic_counts = Counter()
