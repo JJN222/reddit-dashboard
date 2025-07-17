@@ -41,7 +41,7 @@ def home():
     selected_tag = request.args.get("tag")
 
     subreddit = reddit.subreddit("Conservative")
-    posts = subreddit.top(limit=25, time_filter='day')  # Top 50 posts today
+    posts = subreddit.top(limit=25, time_filter='day')  # Top 25 posts today
 
     post_data = []
     topic_counts = Counter()
@@ -55,13 +55,16 @@ def home():
         if selected_tag and selected_tag not in topics:
             continue
 
-        top_comments = []
         post.comments.replace_more(limit=0)
-        for comment in post.comments[:3]:
+        top_comments = []
+
+        if post.comments:
+            top_comment = post.comments[0]
             top_comments.append({
-                "body": comment.body[:200] + ("..." if len(comment.body) > 200 else ""),
-                "upvotes": comment.score
+                "body": top_comment.body[:200] + ("..." if len(top_comment.body) > 200 else ""),
+                "upvotes": top_comment.score
             })
+        
 
         post_info = {
             "title": title,
