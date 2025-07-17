@@ -10,11 +10,11 @@ from collections import Counter, defaultdict
 app = Flask(__name__)
 
 reddit = praw.Reddit(
-    client_id="3-HcG4Imphx9YgIlTMj4gA",
-    client_secret="xVcRzgog4A4FZoNMDyVHR2yAlqbCCA",
-    user_agent="script:reddit-sentiment-analyzer:v1.0 (by u/Ruhtorikal)",
-    requestor_kwargs={"rate_limit_seconds": 2}
+    client_id=os.environ.get("REDDIT_CLIENT_ID"),
+    client_secret=os.environ.get("REDDIT_SECRET"),
+    user_agent=os.environ.get("REDDIT_USER_AGENT"),
 )
+
 
 
 TOPIC_KEYWORDS = {
