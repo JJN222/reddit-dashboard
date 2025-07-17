@@ -1,15 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Reddit Conservative Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #b31b1b;
+        }
+        img {
+            margin: 1rem 0;
+            border: 1px solid #ccc;
+        }
+        select {
+            font-size: 1rem;
+            padding: 0.3rem;
+        }
+        .post {
+            background-color: #fff;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-left: 5px solid #b31b1b;
+        }
+        .post h3 {
+            margin-top: 0;
+        }
+        .comments {
+            margin-top: 0.5rem;
+        }
+    </style>
 </head>
 <body>
+
     <h1>r/Conservative – Top Posts (Today)</h1>
 
     <h3>Charts:</h3>
-    <img src="/static/post_count_chart.png" alt="Top Topics by Post Count" width="600">
+    <img src="{{ url_for('static', filename='post_count_chart.png') }}" alt="Top Topics by Post Count" width="600">
     <br>
-    <img src="/static/upvotes_chart.png" alt="Top Topics by Upvotes" width="600">
+    <img src="{{ url_for('static', filename='upvotes_chart.png') }}" alt="Top Topics by Upvotes" width="600">
 
     <h3>Filter by Topic:</h3>
     <form method="get" action="/">
@@ -24,31 +56,33 @@
     <hr>
 
     {% for post in posts %}
-        <h3>{{ post.title }}</h3>
-        <p><strong>Topics:</strong> {{ post.topics | join(', ') }}</p>
-        <p><strong>Upvotes:</strong> {{ post.upvotes }} |
-           <strong>Comments:</strong> {{ post.comments }} |
-           <strong>Posted:</strong> {{ post.created }}</p>
-        <p><strong>Author:</strong> {{ post.author }} |
-           <strong>Flair:</strong> {{ post.flair }}</p>
+        <div class="post">
+            <h3>{{ post.title }}</h3>
+            <p><strong>Topics:</strong> {{ post.topics | join(', ') }}</p>
+            <p><strong>Upvotes:</strong> {{ post.upvotes }} |
+               <strong>Comments:</strong> {{ post.comments }} |
+               <strong>Posted:</strong> {{ post.created }}</p>
+            <p><strong>Author:</strong> {{ post.author }} |
+               <strong>Flair:</strong> {{ post.flair }}</p>
 
-        {% if post.text %}
-            <p><strong>Text:</strong> {{ post.text }}</p>
-        {% endif %}
+            {% if post.text %}
+                <p><strong>Text:</strong> {{ post.text }}</p>
+            {% endif %}
 
-        <p><a href="{{ post.url }}" target="_blank">Link to Post</a></p>
+            <p><a href="{{ post.url }}" target="_blank">Link to Post</a></p>
 
-        {% if post.top_comments %}
-            <h4>Top Comments:</h4>
-            <ul>
-                {% for comment in post.top_comments %}
-                    <li><strong>Upvotes:</strong> {{ comment.upvotes }} — {{ comment.body }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-
-        <hr>
+            {% if post.top_comments %}
+                <div class="comments">
+                    <h4>Top Comments:</h4>
+                    <ul>
+                        {% for comment in post.top_comments %}
+                            <li><strong>Upvotes:</strong> {{ comment.upvotes }} — {{ comment.body }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
     {% endfor %}
+
 </body>
 </html>
-
