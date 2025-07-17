@@ -3,13 +3,27 @@
 <head>
     <title>r/Conservative – Daily Post Tracker</title>
 </head>
-<body>
-    <h1>r/Conservative – Top Posts (Today)</h1>
+<body style="font-family: Arial, sans-serif;">
+    <h1 style="color: #b30000;">r/Conservative – Top Posts (Today)</h1>
 
     <p><em>Last updated: {{ updated.strftime('%Y-%m-%d %H:%M:%S') }}</em></p>
 
-    <h3>Chart: Top Topics by Upvotes</h3>
+    <h3>Charts:</h3>
+    <img src="/static/post_count_chart.png" alt="Number of Top Posts per Topic" width="600">
+    <br>
     <img src="/static/upvotes_chart.png" alt="Top Topics by Upvotes" width="600">
+
+    <h3>Filter by Topic:</h3>
+    <form method="get" action="/">
+        <select name="tag" onchange="this.form.submit()">
+            <option value="">All Topics</option>
+            {% for tag in tags %}
+                <option value="{{ tag }}" {% if tag == selected_tag %}selected{% endif %}>{{ tag }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <p><em>Posts found: {{ posts|length }}</em></p>
 
     <hr>
 
